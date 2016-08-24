@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 11
+        targetSdkVersion 19
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:19.1.0'
+    compile files('libs/locSDK_4.2.jar')
+}
+
+task makeJar(type: proguard.gradle.ProGuardTask,dependsOn:"build") {
+
+    delete'build/outputs/jar/emms_sdk.jar'//删除之前编译混淆jar包
+
+    injars'build/intermediates/bundles/release/classes.jar'//项目编译但未混淆的jar
+
+    outjars'build/outputs/jar/emms_sdk.jar'//混淆后的jar路径
+
+    configuration'proguard-rules.pro'// 混淆配置文件
+}
