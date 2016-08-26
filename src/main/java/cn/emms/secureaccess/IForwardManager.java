@@ -18,6 +18,7 @@ import cn.emms.dcsecurity.DcSecurity;
 
 /**
  * Created by SRX on 2016-7-13.
+ * 安全接入管理类，用户直接操作该类控制安全接入服务
  */
 public class IForwardManager {
     static final int SHOW_RESPONSE =0;
@@ -27,7 +28,12 @@ public class IForwardManager {
     static Context context;
     static Class aClass;
     static String serviceName;
-    static int timeOut = 10;
+
+    static int minTimeOut = 10;
+    static int maxTimeOut = 50;
+    static int ForwardTimeOut = minTimeOut;
+    static int appTimeOut = minTimeOut;
+    static int withOutTS = 0;
 
     /**标志位 来判断是否初始化成功*/
     static boolean initFlag = false;
@@ -36,9 +42,13 @@ public class IForwardManager {
     /**标志位 表示是否收到认证结果*/
     static boolean getAuthDeviceFlag = false;
 
+    /** 用于接收IForward*/
+    static IForward iForward;
+
     static ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            iForward = ((IForwardService.IForwardIBinder) service).getIForward();
             Log.d("SecureAccess", "onServiceConnected");
         }
 
@@ -46,17 +56,7 @@ public class IForwardManager {
         public void onServiceDisconnected(ComponentName name) {
             //context.startService(getStartIntent(context));
             Log.d("SecureAccess", "onServiceDisconnected");
-            bindService();
-        }
-    };
-
-    static Handler handler = new Handler(){
-        public void handleMessage(Message msg)
-        {
-            switch (msg.what){
-                case SHOW_RESPONSE:
-                    getAuthDeviceFlag = true;
-            }
+            //bindService();
         }
     };
 
@@ -71,8 +71,9 @@ public class IForwardManager {
         setIForwardServerAddr("emms.csrcqsf.com:43546");//192.168.151.123:3456
         aClass = cls;
         serviceName = packageName;
-
         initFlag = true;
+        setForwardTimeOut(minTimeOut);
+        setAppTimeOut(0);
         return initFlag;
     }
 
@@ -105,8 +106,7 @@ public class IForwardManager {
     }
 
     static Intent getStopIntent(){
-        Intent intent = new Intent(context, aClass);
-        return intent;
+        return new Intent(context, aClass);
     }
 
     public static boolean isServiceRunning() {
@@ -123,7 +123,7 @@ public class IForwardManager {
 
         for (int i=0; i<serviceList.size(); i++) {
             String nm = serviceList.get(i).service.getClassName();
-            if (nm.equals(serviceName) == true) {
+            if (nm.equals(serviceName)) {
                 isRunning = true;
                 break;
             }
@@ -132,7 +132,7 @@ public class IForwardManager {
     }
 
     public static void bindService(){
-        if (initFlag==true)
+        if (initFlag)
             context.bindService(getStartIntent(),serviceConnection,Context.BIND_AUTO_CREATE);
     }
 
@@ -141,46 +141,77 @@ public class IForwardManager {
     }
 
     public static void start(){
-        if(initFlag==true && isServiceRunning()==false )
+        if(initFlag&&!isServiceRunning() )
             context.startService(getStartIntent());
     }
     public static void stop(){
-        if (isServiceRunning() == true)
+        if (isServiceRunning())
             context.stopService(getStopIntent());
     }
 
-    static void authDevice(final Context context1) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Message message = new Message();
-                    DcSecurity dcSecurity = new DcSecurity(context1);
-                    authFlag = dcSecurity.authDevice();
-
-                    //发出通知，已经收到设备认证的结果
-                    message.what = SHOW_RESPONSE;
-                    handler.sendMessage(message);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }finally {
-                }
-            }
-        }).start();
+    public static int getAppTimeOut() {
+        return appTimeOut;
     }
 
-    public static int getAuthFlag(Context context){
-        authDevice(context);
-        while(!getAuthDeviceFlag){}
-        return authFlag;
+    public static void setAppTimeOut(int appTimeOut) {
+        IForwardManager.appTimeOut = appTimeOut;
     }
 
-
-    static void setTimeOut(int time){
-        timeOut = time;
+    static void setForwardTimeOut(int time){
+        ForwardTimeOut = time;
     }
 
-    static  int getTimeOut(){
-        return timeOut;
+    static int getForwardTimeOut(){
+        return ForwardTimeOut;
+    }
+
+    public static void refresh(){
+        iForward.clearSockets();
+    }
+
+    public static void turnOnGetTSAndRefresh(){
+        setThresholdAndRefresh(withOutTS,minTimeOut);
+    }
+
+    public static void turnOnPostTSAndRefresh(){
+        setThresholdAndRefresh(minTimeOut,withOutTS);
+    }
+
+    public static void turnOffThresholdAndRefresh(){
+        setThresholdAndRefresh(withOutTS,withOutTS);
+    }
+
+    public static void turnBothThresholdAndRefresh(){
+        setThresholdAndRefresh(minTimeOut,minTimeOut);
+    }
+
+    /**
+     * @param appTs app threshold
+     * @param forwardTs forward threshold
+     */
+    public static void setThresholdAndRefresh(int appTs, int forwardTs){
+        int oldForwardTS = getForwardTimeOut();
+        int oldAppTS = getAppTimeOut();
+        //如果原有超时时间和要设置的值相同，则返回。
+        if(oldForwardTS == forwardTs && oldAppTS == appTs) return;
+
+        if(forwardTs>=minTimeOut && forwardTs<=maxTimeOut){
+            setForwardTimeOut(forwardTs);
+        } else if (forwardTs==withOutTS){
+            setForwardTimeOut(withOutTS);
+        }
+        else {
+            setForwardTimeOut(minTimeOut);
+        }
+
+        if(appTs>=minTimeOut && appTs<=maxTimeOut){
+            setAppTimeOut(appTs);
+        } else if (appTs==withOutTS){
+            setAppTimeOut(withOutTS);
+        }
+        else {
+            setAppTimeOut(minTimeOut);
+        }
+        refresh();
     }
 }

@@ -2,6 +2,7 @@ package cn.emms.secureaccess;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -9,19 +10,33 @@ import java.util.HashMap;
 
 /**
  * Created by SRX on 2016/7/4.
+ * 提供安全接入服务的基类。用户继承该类但不需要实现任何东西。
  */
 public class IForwardService extends Service {
 
     String TAG = "SecureAccess";
     IForward forward;
     HashMap<Integer,String> map ;
+
+    class IForwardIBinder extends Binder {
+        IForward iForward;
+
+        public IForwardIBinder(IForward iForward){
+            this.iForward = iForward;
+        }
+
+        public IForward getIForward() {
+            return iForward;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "IF Service onBind");
         map = (HashMap<Integer, String>) intent.getSerializableExtra("IpMap");
         forward.setForwardAdrr(intent.getStringExtra("ForwardAddr"));
         forward.addMapping(map);
-        return null;
+        return new IForwardIBinder(forward);
     }
 
     @Override

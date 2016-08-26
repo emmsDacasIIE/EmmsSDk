@@ -24,6 +24,7 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:19.1.0'
     compile files('libs/locSDK_4.2.jar')
+    testCompile 'junit:junit:4.12'
 }
 
 task makeJar(type: proguard.gradle.ProGuardTask,dependsOn:"build") {
