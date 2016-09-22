@@ -36,13 +36,6 @@ public <fields>;
 public <methods>;
 
 }
--keep class cn.mcm.**{
-
-public <fields>;
-
-public <methods>;
-
-}
-
+-keep class cn.mcm.**{public *;}
 -keep class com.baidu.location.** { *; }
 -keep public class org.** {*;}
