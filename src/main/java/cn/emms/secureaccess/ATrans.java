@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -19,7 +21,7 @@ public class ATrans {
     private static final int BUFF_SIZE = 512*4;
 
     /** This Ip&Port is just for debug, not for running in real condition*/
-    String ForwardIpPort = "";//"192.168.151.123:3546";//"emms.csrcqsf.com:43546";//Forward IP: 123:3546
+    String ForwardIpPort = "";//"192.168.151.123:3546";//"emms.csrcqsf.com:43546";
     private int localPort = -1;
     private String serverAddr = null;
     private int serverPort = -1;
@@ -61,7 +63,7 @@ public class ATrans {
             return;
         }
         isValidTrans = true;
-
+        //socketsMonitor();
         ForwardIpPort = IFAddr;
         if (ForwardIpPort == null || ForwardIpPort.equals(""))
         {
@@ -97,12 +99,16 @@ public class ATrans {
 
                         // 接收'到'来自app的socket 拥塞！
                         Socket appClient = s.accept();
+                        appClient.setKeepAlive(true);
+                        appClient.setTcpNoDelay(true);
                         appClient.setSoTimeout(1000*IForwardManager.getAppTimeOut());
                         Log.d(TAG,"APP TimeOut :"+IForwardManager.getAppTimeOut());
                         Log.d(TAG, appClient.getRemoteSocketAddress()+" || "+appClient.getLocalAddress()+":"+appClient.getLocalPort());
 
                         // 新建'到'Server的client
                         Socket toForward = new Socket(ip, port);
+                        toForward.setKeepAlive(true);
+                        toForward.setTcpNoDelay(true);
                         //设置超时时间
                         toForward.setSoTimeout(1000*IForwardManager.getForwardTimeOut());//!!
                         Log.d(TAG, "Forw TimOut:"+IForwardManager.getForwardTimeOut());
@@ -159,13 +165,46 @@ public class ATrans {
         Boolean appTimeOut = (IForwardManager.getAppTimeOut()==IForwardManager.withOutTS);
         Boolean ForTimeOut = (IForwardManager.getForwardTimeOut()==IForwardManager.withOutTS);
 
+        private class UrgentDataThread extends Thread{
+            boolean canceled = false;
+            public synchronized void cancel(){
+                canceled = true;
+            }
+            public boolean getCancled(){
+                return canceled;
+            }
+            @Override
+            public void run() {
+                int count = 0;
+                while(!canceled) {
+                    try {
+                        toForward.sendUrgentData(0xFF);
+                        Log.d(TAG, "Urgent Data " + count);
+                        count++;
+                        Thread.sleep(1000 * 10);
+                    } catch (IOException e) {
+                        //UrgentData;
+                        Log.e(TAG, "UrgentData:" + count + "," + e.toString());
+                        //clearSocket(0);
+                        return;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        UrgentDataThread urgentDataThread;
+
 
         public ForwardingThread(Socket appClient, Socket toForward) {
+
             this.appClient = appClient;
             this.toForward = toForward;
-
             appTimeOut = (IForwardManager.getAppTimeOut()==IForwardManager.withOutTS);
             ForTimeOut = (IForwardManager.getForwardTimeOut()==IForwardManager.withOutTS);
+
+            urgentDataThread = new UrgentDataThread();
 
             try {
                 this.appClientIn = this.appClient.getInputStream();
@@ -215,11 +254,12 @@ public class ATrans {
                     clearSocket(0);
                     return;
                 }
-                Log.d(TAG, "Forward gets Server's reply:"+replyStr);
+                Log.d(TAG, "Forward gets Server's reply:" + replyStr);
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             }
 
+            urgentDataThread.start();
             // 监听toForward发送过来的消息，然后通过appClient转发出去
             new Thread(new Runnable() {
 
@@ -227,33 +267,36 @@ public class ATrans {
                 public void run() {
                     byte[] buf = null;
 
-                    while (isValidTrans&&!appClient.isClosed()&&!toForward.isClosed()) {
+                    while (isValidTrans && !appClient.isClosed() && !toForward.isClosed()) {
                         buf = new byte[BUFF_SIZE];
                         int readSize = 0;
                         try {
+                            //read from SA Server
                             readSize = toForwardIn.read(buf);
-                            if(readSize!=-1)
-                            {   //如果TimeOut设为0则为True 不为0时超时启动，用数据为false
-                                ForTimeOut = (IForwardManager.getForwardTimeOut()==IForwardManager.withOutTS);
-                                Log.d(TAG,toForward.getLocalSocketAddress()+" Forward: Receive Len="+readSize);
+                            if (readSize != -1) {   //如果TimeOut设为0则为True 不为0时超时启动，用数据为false
+                                if(readSize==0)
+                                    Log.d(TAG, "Read size=0 from Server");
+                                ForTimeOut = (IForwardManager.getForwardTimeOut() == IForwardManager.withOutTS);
+                                Log.d(TAG, toForward.getLocalSocketAddress() + " Forward: Receive Len=" + readSize);
                             }
-                        }catch(SocketTimeoutException e){
-                        	Log.d(TAG, "Forw TimeOut!");
-                        	clearSocket(2);
-                        }catch (IOException e) {
-                            e.printStackTrace();
+                        } catch (SocketTimeoutException e) {
+                            Log.e(TAG, "Forw TimeOut!");
+                            clearSocket(2);
+                        } catch (IOException e) {
+                            Log.e(TAG, "READ from Server:"+e.toString());
                             clearSocket(0);
                             return;
                         }
 
                         if (readSize > 0) {
                             try {
-                                appClientOut.write(buf,0,readSize);
-                                //appClientOut.flush();
-                                Log.d(TAG,appClient.getLocalSocketAddress()+" App: Get Len="+readSize);
-                            }catch (IOException e) {
+                                //Write to APP
+                                appClientOut.write(buf, 0, readSize);
+                                appClientOut.flush();
+                                Log.d(TAG, appClient.getLocalSocketAddress() + " App: Get Len=" + readSize);
+                            } catch (IOException e) {
+                                Log.e(TAG, "Write to APP:"+e.toString());
                                 clearSocket(0);
-                                e.printStackTrace();
                             }
                         }
                     }
@@ -262,33 +305,59 @@ public class ATrans {
 
             // 监听appClient发送过来的消息,然后通过toForward转发出去
             byte[] buf = null;
-            while (isValidTrans&&!appClient.isClosed()&&!toForward.isClosed()) {
+            while (isValidTrans && !appClient.isClosed() && !toForward.isClosed()) {
                 buf = new byte[BUFF_SIZE];
+                //Log.d(TAG, "NEW BUFF:"+Arrays.toString(buf));
                 int read = 0;
                 try {
+                    // read from APP
                     read = this.appClientIn.read(buf);
+                    if(read==0)
+                        Log.d(TAG, "Read size=0 from APP");
                     if (read > 0) {
                         //当超时启动时，有数据说明没有超时false；超时没有启动的话失效，一直为true；
-                        appTimeOut = (IForwardManager.getAppTimeOut()==IForwardManager.withOutTS);
+                        appTimeOut = (IForwardManager.getAppTimeOut() == IForwardManager.withOutTS);
                         Log.d(TAG, appClient.getLocalSocketAddress() + " App: Write Len=" + read);
                     }
-                }catch(SocketTimeoutException e) {
-                    Log.d(TAG, "APP TimeOut!");
+                } catch (SocketTimeoutException e) {
+                    Log.e(TAG, "APP TimeOut!");
                     clearSocket(1);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Read From APP:"+e.toString());
                     clearSocket(0);
                     return;
                 }
 
+
                 if (read > 0) {
-                    try {
-                        this.toForwardOut.write(buf, 0, read);//设置转发长度
-                        //toForwardOut.flush();
-                        Log.d(TAG,toForward.getLocalSocketAddress()+" Forward: Get Len="+read);
-                    }catch (IOException e) {
+                    /*try {
+                        toForward.sendUrgentData(0xFF);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
+                        //UrgentData;
+                        Log.e(TAG, "UrgentData:"+e.toString());
                         e.printStackTrace();
                         clearSocket(0);
+                        return;
+                    }*/
+                    try {
+                        toForward.sendUrgentData(0xFF);
+                        // Write to Server: Exception should been thrown here!
+                        toForward.getOutputStream().write(buf, 0, read);
+                        toForward.getOutputStream().flush();
+                        Log.d(TAG, toForward.getLocalSocketAddress() + " Forward: Get Len=" + read);
+                        //Thread.sleep(1000*13);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Write to Server:"+e.toString());
+                        e.printStackTrace();
+                        clearSocket(0);
+                        return;
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString() );
                         return;
                     }
                 }
@@ -309,26 +378,28 @@ public class ATrans {
 
             if (type == 0 || bothTimeOut) {
                 socketMapping.remove(this.appClient);
+                urgentDataThread.cancel();
                 try {
                     this.appClientIn.close();
                     this.appClientOut.close();
                     this.toForwardIn.close();
                     this.toForwardOut.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.d(TAG, e.toString());
                 }
                 try {
                     this.appClient.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.d(TAG, e.toString());
                 }
                 try {
                     this.toForward.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.d(TAG, e.toString());
                 }
+                if(appClient.isClosed()&&toForward.isClosed())
+                    Log.d(TAG, "clearSocket: Done");
             }
-            Log.d(TAG, "clearSocket: Done");
         }
     }
 }

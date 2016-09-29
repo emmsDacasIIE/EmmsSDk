@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="debug$Generated" generated="true"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res"/></dataSet><dataSet config="main$Generated" generated="true"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\androidTest\res"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\rs\androidTest\debug"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\resValues\androidTest\debug"/></dataSet><dataSet config="debug" from-dependency="true" generated-set="debug$Generated"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res"><file name="ic_launcher" path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\drawable-hdpi-v4\ic_launcher.png" qualifiers="hdpi-v4" type="drawable"/><file name="ic_launcher" path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\drawable-mdpi-v4\ic_launcher.png" qualifiers="mdpi-v4" type="drawable"/><file name="ic_launcher" path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\drawable-xhdpi-v4\ic_launcher.png" qualifiers="xhdpi-v4" type="drawable"/><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\values\values.xml" qualifiers=""><array name="fileEndingText">
+        <item>.txt</item>
+        <item>.java</item>
+        <item>.c</item>
+        <item>.cpp</item>
+        <item>.py</item>
+        <item>.xml</item>
+        <item>.json</item>
+        <item>.log</item>
+    </array><array name="fileEndingExcel">
+        <item>.xls</item>
+        <item>.xlsx</item>
+    </array><array name="fileEndingVideo">
+        <item>.mp4</item>
+        <item>.rmvb</item>
+        <item>.avi</item>
+        <item>.flv</item>
+    </array><array name="fileEndingWebText">
+        <item>.htm</item>
+        <item>.html</item>
+        <item>.php</item>
+        <item>.jsp</item>
+    </array><string name="title">企业</string><string name="app_name">MCM_SDK</string><array name="fileEndingPackage">
+        <item>.jar</item>
+        <item>.zip</item>
+        <item>.rar</item>
+        <item>.gz</item>
+        <item>.apk</item>
+        <item>.img</item>
+    </array><array name="fileEndingPdf">
+        <item>.pdf</item>
+    </array><array name="fileEndingWord">
+        <item>.doc</item>
+        <item>.docx</item>
+    </array><array name="fileEndingPPT">
+        <item>.ppt</item>
+        <item>.pptx</item>
+    </array><array name="fileEndingImage">
+        <item>.png</item>
+        <item>.gif</item>
+        <item>.jpg</item>
+        <item>.jpeg</item>
+        <item>.bmp</item>
+    </array><style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style><array name="fileEndingAudio">
+        <item>.mp3</item>
+        <item>.wav</item>
+        <item>.ogg</item>
+        <item>.midi</item>
+    </array><style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\values-v11\values-v11.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+        <!-- API 11 theme customizations can go here. -->
+    </style></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\values-v14\values-v14.xml" qualifiers="v14"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- API 14 theme customizations can go here. -->
+    </style></file></source></dataSet><dataSet config="main" generated-set="main$Generated"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\androidTest\res"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\rs\androidTest\debug"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>

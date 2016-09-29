@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\jniLibs"><file name="armeabi/libencFile.so" path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\jniLibs\armeabi\libencFile.so"/></source></dataSet><dataSet config="release"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\release\jniLibs"/></dataSet></merger>

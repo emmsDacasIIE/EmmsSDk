@@ -1,0 +1,297 @@
+[
+    {
+        "outputFile": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 7,
+                    "endColumn": 12,
+                    "endOffset": 203
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endLine": 7,
+                        "endColumn": 12,
+                        "endOffset": 203
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 208,
+                    "endLine": 11,
+                    "endColumn": 12,
+                    "endOffset": 304
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 208,
+                        "endLine": 11,
+                        "endColumn": 12,
+                        "endOffset": 304
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 309,
+                    "endLine": 18,
+                    "endColumn": 12,
+                    "endOffset": 483
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 309,
+                        "endLine": 18,
+                        "endColumn": 12,
+                        "endOffset": 483
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 488,
+                    "endLine": 22,
+                    "endColumn": 12,
+                    "endOffset": 582
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 488,
+                        "endLine": 22,
+                        "endColumn": 12,
+                        "endOffset": 582
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 587,
+                    "endLine": 30,
+                    "endColumn": 12,
+                    "endOffset": 787
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 587,
+                        "endLine": 30,
+                        "endColumn": 12,
+                        "endOffset": 787
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 792,
+                    "endLine": 33,
+                    "endColumn": 12,
+                    "endOffset": 859
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 31,
+                        "startColumn": 4,
+                        "startOffset": 792,
+                        "endLine": 33,
+                        "endColumn": 12,
+                        "endOffset": 859
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 864,
+                    "endLine": 43,
+                    "endColumn": 12,
+                    "endOffset": 1113
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 34,
+                        "startColumn": 4,
+                        "startOffset": 864,
+                        "endLine": 43,
+                        "endColumn": 12,
+                        "endOffset": 1113
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 1118,
+                    "endLine": 49,
+                    "endColumn": 12,
+                    "endOffset": 1266
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 44,
+                        "startColumn": 4,
+                        "startOffset": 1118,
+                        "endLine": 49,
+                        "endColumn": 12,
+                        "endOffset": 1266
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 1271,
+                    "endLine": 55,
+                    "endColumn": 12,
+                    "endOffset": 1421
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 50,
+                        "startColumn": 4,
+                        "startOffset": 1271,
+                        "endLine": 55,
+                        "endColumn": 12,
+                        "endOffset": 1421
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 56,
+                    "startColumn": 4,
+                    "startOffset": 1426,
+                    "endLine": 59,
+                    "endColumn": 12,
+                    "endOffset": 1521
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 56,
+                        "startColumn": 4,
+                        "startOffset": 1426,
+                        "endLine": 59,
+                        "endColumn": 12,
+                        "endOffset": 1521
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 60,
+                    "startColumn": 4,
+                    "startOffset": 1526,
+                    "endColumn": 44,
+                    "endOffset": 1566
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 60,
+                        "startColumn": 4,
+                        "startOffset": 1526,
+                        "endColumn": 44,
+                        "endOffset": 1566
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 61,
+                    "startColumn": 4,
+                    "startOffset": 1571,
+                    "endColumn": 36,
+                    "endOffset": 1603
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 61,
+                        "startColumn": 4,
+                        "startOffset": 1571,
+                        "endColumn": 36,
+                        "endOffset": 1603
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 62,
+                    "startColumn": 4,
+                    "startOffset": 1608,
+                    "endLine": 68,
+                    "endColumn": 12,
+                    "endOffset": 1894
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 62,
+                        "startColumn": 4,
+                        "startOffset": 1608,
+                        "endLine": 68,
+                        "endColumn": 12,
+                        "endOffset": 1894
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 69,
+                    "startColumn": 4,
+                    "startOffset": 1899,
+                    "endLine": 71,
+                    "endColumn": 12,
+                    "endOffset": 2054
+                },
+                "from": {
+                    "file": "C:\\Users\\Administrator\\Desktop\\AndroidTestLab\\MCM_SDK\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 69,
+                        "startColumn": 4,
+                        "startOffset": 1899,
+                        "endLine": 71,
+                        "endColumn": 12,
+                        "endOffset": 2054
+                    }
+                }
+            }
+        ]
+    }
+]

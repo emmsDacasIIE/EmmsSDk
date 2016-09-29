@@ -1,11 +1,13 @@
 package cn.emms.secureaccess;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import java.util.Set;
  */
 public class IForward {
     //public static final int FORWARD_PORT = 3546;
+    private String TAG="SecureAccess";
     String forwardAdrr;
     private HashMap<Integer, String> localPort2Addr = null;
     private List<ATrans> transactions = new ArrayList<>();
@@ -58,29 +61,30 @@ public class IForward {
     }
 
     public void clearSockets(){
-        for(ATrans trans:transactions){
-            try{
-                Set<Socket> appClients = trans.getSocketMapping().keySet();
-                for (Socket client : appClients) {
-                    Socket server = trans.getSocketMapping().get(client);
-                    //直接如此删除会报错。
-                    //trans.getSocketMapping().remove(client);
-                    try {
-                        client.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        server.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        if(transactions.size()==0||transactions==null)
+            return;
+        for(ATrans trans:transactions) {
+            Set<Socket> appClients = trans.getSocketMapping().keySet();
+            for (Iterator<Socket> it = appClients.iterator(); it.hasNext(); ) {
+                Socket client = it.next();
+                Socket server = trans.getSocketMapping().get(client);
+                try {
+                    //client.shutdownInput();
+                    client.close();
+                    Log.d(TAG, "client.shutdownInput");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                trans.getSocketMapping().clear();
-
-            }catch(Exception e){
-                e.printStackTrace();
+                try {
+                    server.close();
+                    //server.shutdownOutput();
+                    Log.d(TAG, "server.shutdownOutput");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //trans.getSocketMapping().remove(client);
             }
+            trans.getSocketMapping().clear();
         }
     }
 

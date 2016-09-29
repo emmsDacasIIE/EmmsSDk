@@ -72,8 +72,8 @@ public class IForwardManager {
         aClass = cls;
         serviceName = packageName;
         initFlag = true;
-        setForwardTimeOut(minTimeOut);
-        setAppTimeOut(0);
+        setForwardTimeOut(withOutTS);
+        setAppTimeOut(withOutTS);
         return initFlag;
     }
 
@@ -166,6 +166,8 @@ public class IForwardManager {
     }
 
     public static void refresh(){
+        if (iForward==null)
+            return;
         iForward.clearSockets();
     }
 

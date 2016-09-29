@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 25.2.2 rc1">
+
+    <issue
+        id="CommitPrefEdits"
+        severity="Warning"
+        message="Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background"
+        category="Correctness"
+        priority="6"
+        summary="Missing `commit()` on `SharedPreference` editor"
+        explanation="After calling `edit()` on a `SharedPreference`, you must call `commit()` or `apply()` on the editor to save the results."
+        errorLine1="     editor.commit();"
+        errorLine2="     ~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\cryption\Cryption.java"
+            line="107"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="CommitPrefEdits"
+        severity="Warning"
+        message="Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background"
+        category="Correctness"
+        priority="6"
+        summary="Missing `commit()` on `SharedPreference` editor"
+        explanation="After calling `edit()` on a `SharedPreference`, you must call `commit()` or `apply()` on the editor to save the results."
+        errorLine1="     editor.commit();"
+        errorLine2="     ~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\cryption\Cryption.java"
+            line="124"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="CommitPrefEdits"
+        severity="Warning"
+        message="Consider using `apply()` instead; `commit` writes its data to persistent storage immediately, whereas `apply` will handle it in the background"
+        category="Correctness"
+        priority="6"
+        summary="Missing `commit()` on `SharedPreference` editor"
+        explanation="After calling `edit()` on a `SharedPreference`, you must call `commit()` or `apply()` on the editor to save the results."
+        errorLine1="      editor.commit();"
+        errorLine2="      ~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\appmanager\Statistics.java"
+            line="100"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        severity="Warning"
+        message="Implicitly using the default locale is a common source of bugs: Use `toLowerCase(Locale)` instead"
+        category="Correctness"
+        priority="6"
+        summary="Implied default locale in case conversion"
+        explanation="Calling `String#toLowerCase()` or `#toUpperCase()` *without specifying an explicit locale* is a common source of bugs. The reason for that is that those methods will use the current locale on the user&apos;s device, and even though the code appears to work correctly when you are developing the app, it will fail in some locales. For example, in the Turkish locale, the uppercase replacement for `i` is *not* `I`.
+
+If you want the methods to just perform ASCII replacement, for example to convert an enum name, call `String#toUpperCase(Locale.US)` instead. If you really want to use the current locale, call `String#toUpperCase(Locale.getDefault())` instead."
+        url="http://developer.android.com/reference/java/util/Locale.html#default_locale"
+        urls="http://developer.android.com/reference/java/util/Locale.html#default_locale"
+        errorLine1="   if (pI.packageName.toLowerCase().equals(&quot;cn.wps.moffice_eng&quot;)) {"
+        errorLine2="                      ~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\filemanager\FileManager.java"
+            line="59"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        severity="Warning"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
+        category="Correctness"
+        priority="6"
+        summary="Target SDK attribute is not targeting latest version"
+        explanation="When your application runs on a version of Android that is more recent than your `targetSdkVersion` specifies that it has been tested with, various compatibility modes kick in. This ensures that your application continues to work, but it may look out of place. For example, if the `targetSdkVersion` is less than 14, your app may get an option button in the UI.
+
+To fix this issue, set the `targetSdkVersion` to the highest available value. Then test your app to make sure everything works correctly. You may want to consult the compatibility notes to see what changes apply to each version you are adding support for: http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        url="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        urls="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        errorLine1="        android:targetSdkVersion=&quot;19&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\AndroidManifest.xml"
+            line="8"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        severity="Warning"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details."
+        category="Correctness"
+        priority="6"
+        summary="Target SDK attribute is not targeting latest version"
+        explanation="When your application runs on a version of Android that is more recent than your `targetSdkVersion` specifies that it has been tested with, various compatibility modes kick in. This ensures that your application continues to work, but it may look out of place. For example, if the `targetSdkVersion` is less than 14, your app may get an option button in the UI.
+
+To fix this issue, set the `targetSdkVersion` to the highest available value. Then test your app to make sure everything works correctly. You may want to consult the compatibility notes to see what changes apply to each version you are adding support for: http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        url="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        urls="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html"
+        errorLine1="        targetSdkVersion 19"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build.gradle"
+            line="9"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="Registered"
+        severity="Warning"
+        message="The `&lt;application> cn.mcm.cryption.Cryption` is not registered in the manifest"
+        category="Correctness"
+        priority="6"
+        summary="Class is not registered in the manifest"
+        explanation="Activities, services and content providers should be registered in the `AndroidManifest.xml` file using `&lt;activity>`, `&lt;service>` and `&lt;provider>` tags.
+
+If your activity is simply a parent class intended to be subclassed by other &quot;real&quot; activities, make it an abstract class."
+        url="http://developer.android.com/guide/topics/manifest/manifest-intro.html"
+        urls="http://developer.android.com/guide/topics/manifest/manifest-intro.html"
+        errorLine1="public class Cryption extends Application {"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\cryption\Cryption.java"
+            line="23"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Registered"
+        severity="Warning"
+        message="The `&lt;application> cn.mcm.key.GetInfo` is not registered in the manifest"
+        category="Correctness"
+        priority="6"
+        summary="Class is not registered in the manifest"
+        explanation="Activities, services and content providers should be registered in the `AndroidManifest.xml` file using `&lt;activity>`, `&lt;service>` and `&lt;provider>` tags.
+
+If your activity is simply a parent class intended to be subclassed by other &quot;real&quot; activities, make it an abstract class."
+        url="http://developer.android.com/guide/topics/manifest/manifest-intro.html"
+        urls="http://developer.android.com/guide/topics/manifest/manifest-intro.html"
+        errorLine1="public class GetInfo extends Application {"
+        errorLine2="             ~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\key\GetInfo.java"
+            line="13"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Registered"
+        severity="Warning"
+        message="The `&lt;service> cn.emms.secureaccess.IForwardService` is not registered in the manifest"
+        category="Correctness"
+        priority="6"
+        summary="Class is not registered in the manifest"
+        explanation="Activities, services and content providers should be registered in the `AndroidManifest.xml` file using `&lt;activity>`, `&lt;service>` and `&lt;provider>` tags.
+
+If your activity is simply a parent class intended to be subclassed by other &quot;real&quot; activities, make it an abstract class."
+        url="http://developer.android.com/guide/topics/manifest/manifest-intro.html"
+        urls="http://developer.android.com/guide/topics/manifest/manifest-intro.html"
+        errorLine1="public class IForwardService extends Service {"
+        errorLine2="             ~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\emms\secureaccess\IForwardService.java"
+            line="15"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="SdCardPath"
+        severity="Warning"
+        message="Do not hardcode &quot;`/data/`&quot;; use `Context.getFilesDir().getPath()` instead"
+        category="Correctness"
+        priority="6"
+        summary="Hardcoded reference to `/sdcard`"
+        explanation="Your code should not reference the `/sdcard` path directly; instead use `Environment.getExternalStorageDirectory().getPath()`.
+
+Similarly, do not reference the `/data/data/` path directly; it can vary in multi-user scenarios. Instead, use `Context.getFilesDir().getPath()`."
+        url="http://developer.android.com/guide/topics/data/data-storage.html#filesExternal"
+        urls="http://developer.android.com/guide/topics/data/data-storage.html#filesExternal"
+        errorLine1="        deleteFilesByDirectory(new File(&quot;/data/data/&quot;"
+        errorLine2="                                        ~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\emms\dcsecurity\DataCleanManager.java"
+            line="17"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="SdCardPath"
+        severity="Warning"
+        message="Do not hardcode &quot;`/data/`&quot;; use `Context.getFilesDir().getPath()` instead"
+        category="Correctness"
+        priority="6"
+        summary="Hardcoded reference to `/sdcard`"
+        explanation="Your code should not reference the `/sdcard` path directly; instead use `Environment.getExternalStorageDirectory().getPath()`.
+
+Similarly, do not reference the `/data/data/` path directly; it can vary in multi-user scenarios. Instead, use `Context.getFilesDir().getPath()`."
+        url="http://developer.android.com/guide/topics/data/data-storage.html#filesExternal"
+        urls="http://developer.android.com/guide/topics/data/data-storage.html#filesExternal"
+        errorLine1="        deleteFilesByDirectory(new File(&quot;/data/data/&quot;"
+        errorLine2="                                        ~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\emms\dcsecurity\DataCleanManager.java"
+            line="26"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="ManifestOrder"
+        severity="Warning"
+        message="`&lt;uses-permission>` tag appears after `&lt;application>` tag"
+        category="Correctness"
+        priority="5"
+        summary="Incorrect order of elements in manifest"
+        explanation="The &lt;application> tag should appear after the elements which declare which version you need, which features you need, which libraries you need, and so on. In the past there have been subtle bugs (such as themes not getting applied correctly) when the `&lt;application>` tag appears before some of these other elements, so it&apos;s best to order your manifest in the logical dependency order."
+        errorLine1=" &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/>"
+        errorLine2=" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\AndroidManifest.xml"
+            line="16"
+            column="2"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        severity="Warning"
+        message="A newer version of com.android.support:support-v4 than 19.1.0 is available: 24.2.0"
+        category="Correctness"
+        priority="4"
+        summary="Obsolete Gradle Dependency"
+        explanation="This detector looks for usages of libraries where the version you are using is not the current stable release. Using older versions is fine, and there are cases where you deliberately want to stick with an older version. However, you may simply not be aware that a more recent version is available, and that is what this lint check helps find."
+        errorLine1="    compile &apos;com.android.support:support-v4:19.1.0&apos;"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        quickfix="studio">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build.gradle"
+            line="25"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="GradleOverrides"
+        severity="Warning"
+        message="This `minSdkVersion` value (`11`) is not used; it is always overridden by the value specified in the Gradle build script (`11`)"
+        category="Correctness"
+        priority="4"
+        summary="Value overridden by Gradle build script"
+        explanation="The value of (for example) `minSdkVersion` is only used if it is not specified in the `build.gradle` build scripts. When specified in the Gradle build scripts, the manifest value is ignored and can be misleading, so should be removed to avoid ambiguity."
+        errorLine1="        android:minSdkVersion=&quot;11&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\AndroidManifest.xml"
+            line="7"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="GradleOverrides"
+        severity="Warning"
+        message="This `targetSdkVersion` value (`19`) is not used; it is always overridden by the value specified in the Gradle build script (`19`)"
+        category="Correctness"
+        priority="4"
+        summary="Value overridden by Gradle build script"
+        explanation="The value of (for example) `minSdkVersion` is only used if it is not specified in the `build.gradle` build scripts. When specified in the Gradle build scripts, the manifest value is ignored and can be misleading, so should be removed to avoid ambiguity."
+        errorLine1="        android:targetSdkVersion=&quot;19&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\AndroidManifest.xml"
+            line="8"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="TrulyRandom"
+        severity="Warning"
+        message="Potentially insecure random numbers on Android 4.3 and older. Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info."
+        category="Security"
+        priority="9"
+        summary="Weak RNG"
+        explanation="Key generation, signing, encryption, and random number generation may not receive cryptographically strong values due to improper initialization of the underlying PRNG on Android 4.3 and below.
+
+If your application relies on cryptographically secure random number generation you should apply the workaround described in https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html .
+
+This lint rule is mostly informational; it does not accurately detect whether cryptographically secure RNG is required, or whether the workaround has already been applied. After reading the blog entry and updating your code if necessary, you can disable this lint issue."
+        url="https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html"
+        urls="https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html"
+        errorLine1="        KeyGenerator kgen = KeyGenerator.getInstance(&quot;AES&quot;);"
+        errorLine2="                                         ~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\mcm\cryption\AESHelper.java"
+            line="128"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        severity="Warning"
+        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers"
+        category="Security"
+        priority="6"
+        summary="Insecure TLS/SSL trust manager"
+        explanation="This check looks for X509TrustManager implementations whose `checkServerTrusted` or `checkClientTrusted` methods do nothing (thus trusting any certificate chain) which could result in insecure network traffic caused by trusting arbitrary TLS/SSL certificates presented by peers."
+        errorLine1="    public void checkClientTrusted(X509Certificate[] chain, String authType)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\emms\dcsecurity\HttpsClient.java"
+            line="71"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        severity="Warning"
+        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers"
+        category="Security"
+        priority="6"
+        summary="Insecure TLS/SSL trust manager"
+        explanation="This check looks for X509TrustManager implementations whose `checkServerTrusted` or `checkClientTrusted` methods do nothing (thus trusting any certificate chain) which could result in insecure network traffic caused by trusting arbitrary TLS/SSL certificates presented by peers."
+        errorLine1="    public void checkServerTrusted(X509Certificate[] chain, String authType)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\java\cn\emms\dcsecurity\HttpsClient.java"
+            line="75"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingImage` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingImage&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="4"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingAudio` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingAudio&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="11"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingVideo` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingVideo&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="17"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingPackage` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingPackage&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="23"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingWebText` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingWebText&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="31"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingText` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingText&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="37"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingWord` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingWord&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="47"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingExcel` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingExcel&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="51"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingPPT` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingPPT&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="55"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.array.fileEndingPdf` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;array name=&quot;fileEndingPdf&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\file_endings.xml"
+            line="59"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.string.title` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds."
+        errorLine1="    &lt;string name=&quot;title&quot;>企业&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\strings.xml"
+            line="4"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="IconMissingDensityFolder"
+        severity="Warning"
+        message="Missing density variation folders in `src\main\res`: drawable-xxhdpi, drawable-xxxhdpi"
+        category="Usability:Icons"
+        priority="3"
+        summary="Missing density folder"
+        explanation="Icons will look best if a custom version is provided for each of the major screen density classes (low, medium, high, extra-high, extra-extra-high). This lint check identifies folders which are missing, such as `drawable-hdpi`.
+
+Low density is not really used much anymore, so this check ignores the ldpi density. To force lint to include it, set the environment variable `ANDROID_LINT_INCLUDE_LDPI=true`. For more information on current density usage, see http://developer.android.com/resources/dashboard/screens.html"
+        url="http://developer.android.com/guide/practices/screens_support.html"
+        urls="http://developer.android.com/guide/practices/screens_support.html">
+        <location
+            file="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res"/>
+    </issue>
+
+</issues>
