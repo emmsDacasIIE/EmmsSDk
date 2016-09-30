@@ -22,7 +22,7 @@ public class IForward {
     private HashMap<Integer, String> localPort2Addr = null;
     private List<ATrans> transactions = new ArrayList<>();
 
-    @SuppressLint("UseSparseArrays") 
+    @SuppressLint("UseSparseArrays")
     public IForward(){
         localPort2Addr = new HashMap<>();
     }

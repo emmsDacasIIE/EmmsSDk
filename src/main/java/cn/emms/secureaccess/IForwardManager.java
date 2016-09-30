@@ -30,17 +30,15 @@ public class IForwardManager {
     static String serviceName;
 
     static int minTimeOut = 10;
-    static int maxTimeOut = 50;
-    static int ForwardTimeOut = minTimeOut;
-    static int appTimeOut = minTimeOut;
+    static int maxTimeOut = 120;
     static int withOutTS = 0;
+    static int ForwardTimeOut = withOutTS;
+    static int appTimeOut = maxTimeOut;
+
+    static boolean isNeedUrgentData = true;
 
     /**标志位 来判断是否初始化成功*/
     static boolean initFlag = false;
-    /**标志位 用来判断设备是否被认证，-1：操作失败；0：未认证；1：认证成功*/
-    static int authFlag = -1;
-    /**标志位 表示是否收到认证结果*/
-    static boolean getAuthDeviceFlag = false;
 
     /** 用于接收IForward*/
     static IForward iForward;
@@ -68,12 +66,12 @@ public class IForwardManager {
         setLocalPort(localPort);
         setWebServerAddr(webServerAddr);
         setContext(context);
-        setIForwardServerAddr("emms.csrcqsf.com:43546");//192.168.151.123:3456
+        setIForwardServerAddr("emms.csrcqsf.com:43546");//192.168.151.123:3456  emms.csrcqsf.com 122.4.80.26
         aClass = cls;
         serviceName = packageName;
         initFlag = true;
-        setForwardTimeOut(withOutTS);
-        setAppTimeOut(withOutTS);
+        //setForwardTimeOut(minTimeOut);
+        //setAppTimeOut(maxTimeOut);
         return initFlag;
     }
 
@@ -171,19 +169,19 @@ public class IForwardManager {
         iForward.clearSockets();
     }
 
-    public static void turnOnGetTSAndRefresh(){
+    private static void turnOnGetTSAndRefresh(){
         setThresholdAndRefresh(withOutTS,minTimeOut);
     }
 
-    public static void turnOnPostTSAndRefresh(){
+    private static void turnOnPostTSAndRefresh(){
         setThresholdAndRefresh(minTimeOut,withOutTS);
     }
 
-    public static void turnOffThresholdAndRefresh(){
+    private static void turnOffThresholdAndRefresh(){
         setThresholdAndRefresh(withOutTS,withOutTS);
     }
 
-    public static void turnBothThresholdAndRefresh(){
+    private static void turnBothThresholdAndRefresh(){
         setThresholdAndRefresh(minTimeOut,minTimeOut);
     }
 
@@ -191,7 +189,7 @@ public class IForwardManager {
      * @param appTs app threshold
      * @param forwardTs forward threshold
      */
-    public static void setThresholdAndRefresh(int appTs, int forwardTs){
+    private static void setThresholdAndRefresh(int appTs, int forwardTs){
         int oldForwardTS = getForwardTimeOut();
         int oldAppTS = getAppTimeOut();
         //如果原有超时时间和要设置的值相同，则返回。
@@ -214,6 +212,16 @@ public class IForwardManager {
         else {
             setAppTimeOut(minTimeOut);
         }
+        refresh();
+    }
+
+    static public void setOneSyncTask(){
+        isNeedUrgentData = false;
+        refresh();
+    }
+
+    static public void setMulAsynTask(){
+        isNeedUrgentData = true;
         refresh();
     }
 }

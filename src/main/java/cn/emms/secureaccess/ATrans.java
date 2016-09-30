@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -37,12 +36,12 @@ public class ATrans {
     public HashMap<Socket, Socket> getSocketMapping() {
         return socketMapping;
     }
-	/**
-	 * ATrans初始化
-	 * @param localPort 本地端口
-	 * @param serverAddr 服务器地址
-	 * @param serverPort 服务器端口
-	 */
+    /**
+     * ATrans初始化
+     * @param localPort 本地端口
+     * @param serverAddr 服务器地址
+     * @param serverPort 服务器端口
+     */
     public ATrans(int localPort, String serverAddr, int serverPort) {
         this.localPort = localPort;
         this.serverAddr = serverAddr;
@@ -50,15 +49,15 @@ public class ATrans {
         this.socketMapping = new HashMap<>();
     }
 
-	/**
-	 * 运行
-	 * 1. 如果发现本地端口、服务器地址、服务器端口三者有一没有设置，则返回空，不执行。
-	 * 2. isValidTrans为真时，循环监听端口，如果发现有APP发起连接请求，则建立到Server端的对应关系Socket转发关系
-	 * 3. 建立完对应关系后，执行转发进程。
-	 */
+    /**
+     * 运行
+     * 1. 如果发现本地端口、服务器地址、服务器端口三者有一没有设置，则返回空，不执行。
+     * 2. isValidTrans为真时，循环监听端口，如果发现有APP发起连接请求，则建立到Server端的对应关系Socket转发关系
+     * 3. 建立完对应关系后，执行转发进程。
+     */
     public void execute(String IFAddr) {
-    	//如果发现本地端口、服务器地址、服务器端口三者有一没有设置，则返回空，不执行
-    	if (this.localPort <= -1 || this.serverAddr == null
+        //如果发现本地端口、服务器地址、服务器端口三者有一没有设置，则返回空，不执行
+        if (this.localPort <= -1 || this.serverAddr == null
                 || this.serverPort <= -1) {
             return;
         }
@@ -106,9 +105,10 @@ public class ATrans {
                         Log.d(TAG, appClient.getRemoteSocketAddress()+" || "+appClient.getLocalAddress()+":"+appClient.getLocalPort());
 
                         // 新建'到'Server的client
-                        Socket toForward = new Socket(ip, port);
+                        Socket toForward = new Socket();
                         toForward.setKeepAlive(true);
                         toForward.setTcpNoDelay(true);
+                        toForward.connect(new InetSocketAddress(ip, port), 1000*5);
                         //设置超时时间
                         toForward.setSoTimeout(1000*IForwardManager.getForwardTimeOut());//!!
                         Log.d(TAG, "Forw TimOut:"+IForwardManager.getForwardTimeOut());
@@ -121,7 +121,7 @@ public class ATrans {
                                 toForward);
                         forwardThread.start();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "create Sockets:"+e.toString());
                     }
                 }
             }
@@ -259,7 +259,8 @@ public class ATrans {
                 e1.printStackTrace();
             }
 
-            urgentDataThread.start();
+            if(IForwardManager.isNeedUrgentData)
+                urgentDataThread.start();
             // 监听toForward发送过来的消息，然后通过appClient转发出去
             new Thread(new Runnable() {
 
@@ -380,6 +381,9 @@ public class ATrans {
                 socketMapping.remove(this.appClient);
                 urgentDataThread.cancel();
                 try {
+                    appClientOut.flush();
+                    toForwardOut.flush();
+
                     this.appClientIn.close();
                     this.appClientOut.close();
                     this.toForwardIn.close();
