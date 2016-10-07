@@ -34,7 +34,7 @@ public class IForwardService extends Service {
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "IF Service onBind");
         map = (HashMap<Integer, String>) intent.getSerializableExtra("IpMap");
-        forward.setForwardAdrr(intent.getStringExtra("ForwardAddr"));
+        forward.setForwardAddr(intent.getStringExtra("ForwardAddr"));
         forward.addMapping(map);
         return new IForwardIBinder(forward);
     }
@@ -51,7 +51,7 @@ public class IForwardService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG,"IF Service onStartCommand");
         map = (HashMap<Integer, String>) intent.getSerializableExtra("IpMap");
-        forward.setForwardAdrr(intent.getStringExtra("ForwardAddr"));
+        forward.setForwardAddr(intent.getStringExtra("ForwardAddr"));
         forward.addMapping(map);
         return super.onStartCommand(intent, flags, startId);
     }

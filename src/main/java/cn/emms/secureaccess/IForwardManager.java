@@ -70,8 +70,8 @@ public class IForwardManager {
         aClass = cls;
         serviceName = packageName;
         initFlag = true;
-        //setForwardTimeOut(minTimeOut);
-        //setAppTimeOut(maxTimeOut);
+        setForwardTimeOut(withOutTS);
+        setAppTimeOut(withOutTS);
         return initFlag;
     }
 

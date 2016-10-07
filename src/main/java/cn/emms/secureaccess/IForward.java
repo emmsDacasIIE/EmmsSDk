@@ -18,7 +18,7 @@ import java.util.Set;
 public class IForward {
     //public static final int FORWARD_PORT = 3546;
     private String TAG="SecureAccess";
-    String forwardAdrr;
+    String forwardAddr;
     private HashMap<Integer, String> localPort2Addr = null;
     private List<ATrans> transactions = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class IForward {
                     localPort2Addr.put(key, map.get(key));
                     ATrans trans = new ATrans(key, server[0], Integer.parseInt(server[1]));
                     transactions.add(trans);
-                    trans.execute(getForwardAdrr());
+                    trans.execute(getForwardAddr());
                 }
             }
         }
@@ -88,11 +88,11 @@ public class IForward {
         }
     }
 
-    public String getForwardAdrr() {
-        return forwardAdrr;
+    public String getForwardAddr() {
+        return forwardAddr;
     }
 
-    public void setForwardAdrr(String addr){
-        this.forwardAdrr=addr;
+    public void setForwardAddr(String addr){
+        this.forwardAddr =addr;
     }
 }

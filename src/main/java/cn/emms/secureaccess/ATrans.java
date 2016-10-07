@@ -17,9 +17,8 @@ import android.util.Log;
  * Socket转发类，具体实现安全接入消息转发
  */
 public class ATrans {
-    private static final int BUFF_SIZE = 512*4;
+    private static final int BUFF_SIZE = 512*2*50;
 
-    /** This Ip&Port is just for debug, not for running in real condition*/
     String ForwardIpPort = "";//"192.168.151.123:3546";//"emms.csrcqsf.com:43546";
     private int localPort = -1;
     private String serverAddr = null;
@@ -62,10 +61,8 @@ public class ATrans {
             return;
         }
         isValidTrans = true;
-        //socketsMonitor();
         ForwardIpPort = IFAddr;
-        if (ForwardIpPort == null || ForwardIpPort.equals(""))
-        {
+        if (ForwardIpPort == null || ForwardIpPort.equals("")) {
             return;
         }
 
@@ -87,8 +84,6 @@ public class ATrans {
 
                 while (isValidTrans) {
                     try {
-                    	/*为实验而修改*/
-                        //String ipAndPortRaw = NetworkDef.getAvailableForwardIp();
                         String ipAndPortRaw = ForwardIpPort;
                         if (ipAndPortRaw == null)
                             continue;
@@ -100,6 +95,7 @@ public class ATrans {
                         Socket appClient = s.accept();
                         appClient.setKeepAlive(true);
                         appClient.setTcpNoDelay(true);
+                        //appClient.setSoLinger(true,1);
                         appClient.setSoTimeout(1000*IForwardManager.getAppTimeOut());
                         Log.d(TAG,"APP TimeOut :"+IForwardManager.getAppTimeOut());
                         Log.d(TAG, appClient.getRemoteSocketAddress()+" || "+appClient.getLocalAddress()+":"+appClient.getLocalPort());
@@ -185,7 +181,7 @@ public class ATrans {
                     } catch (IOException e) {
                         //UrgentData;
                         Log.e(TAG, "UrgentData:" + count + "," + e.toString());
-                        //clearSocket(0);
+                        clearSocket(0);
                         return;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -331,22 +327,8 @@ public class ATrans {
 
 
                 if (read > 0) {
-                    /*try {
-                        toForward.sendUrgentData(0xFF);
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (IOException e) {
-                        //UrgentData;
-                        Log.e(TAG, "UrgentData:"+e.toString());
-                        e.printStackTrace();
-                        clearSocket(0);
-                        return;
-                    }*/
                     try {
-                        toForward.sendUrgentData(0xFF);
+                        //toForward.sendUrgentData(0xFF);
                         // Write to Server: Exception should been thrown here!
                         toForward.getOutputStream().write(buf, 0, read);
                         toForward.getOutputStream().flush();
@@ -381,9 +363,6 @@ public class ATrans {
                 socketMapping.remove(this.appClient);
                 urgentDataThread.cancel();
                 try {
-                    appClientOut.flush();
-                    toForwardOut.flush();
-
                     this.appClientIn.close();
                     this.appClientOut.close();
                     this.toForwardIn.close();
