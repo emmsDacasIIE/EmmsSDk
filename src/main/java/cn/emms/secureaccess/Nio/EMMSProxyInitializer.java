@@ -19,12 +19,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public class HexDumpProxyInitializer extends ChannelInitializer<SocketChannel> {
+public class EMMSProxyInitializer extends ChannelInitializer<SocketChannel> {
 
     private final String remoteHost;
     private final int remotePort;
 
-    public HexDumpProxyInitializer(String remoteHost, int remotePort) {
+    public EMMSProxyInitializer(String remoteHost, int remotePort) {
         this.remoteHost = remoteHost;
         this.remotePort = remotePort;
     }
@@ -33,6 +33,6 @@ public class HexDumpProxyInitializer extends ChannelInitializer<SocketChannel> {
     public void initChannel(SocketChannel ch) {
         ch.pipeline().addLast(
                 new LoggingHandler(LogLevel.INFO),
-                new HexDumpProxyFrontendHandler(remoteHost, remotePort));
+                new EMMSProxyFrontendHandler(remoteHost, remotePort));
     }
 }

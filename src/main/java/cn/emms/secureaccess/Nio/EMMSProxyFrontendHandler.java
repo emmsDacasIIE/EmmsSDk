@@ -26,7 +26,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelOption;
 
-public class HexDumpProxyFrontendHandler extends ChannelInboundHandlerAdapter {
+public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
     private final String remoteHost;
     private final int remotePort;
     private static final String TAG = "SecureAccess";
@@ -35,7 +35,7 @@ public class HexDumpProxyFrontendHandler extends ChannelInboundHandlerAdapter {
     // the outboundChannel will use the same EventLoop (and therefore Thread) as the inboundChannel.
     private Channel outboundChannel;
 
-    public HexDumpProxyFrontendHandler(String remoteHost, int remotePort) {
+    public EMMSProxyFrontendHandler(String remoteHost, int remotePort) {
         this.remoteHost = remoteHost;
         this.remotePort = remotePort;
     }
@@ -50,7 +50,7 @@ public class HexDumpProxyFrontendHandler extends ChannelInboundHandlerAdapter {
         Bootstrap b = new Bootstrap();
         b.group(inboundChannel.eventLoop())
          .channel(ctx.channel().getClass())
-         .handler(new HexDumpProxyBackendHandler(inboundChannel))
+         .handler(new EMMSProxyBackendHandler(inboundChannel))
          .option(ChannelOption.AUTO_READ, false);
         ChannelFuture f = b.connect(remoteHost, remotePort);
         outboundChannel = f.channel();

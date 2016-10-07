@@ -24,15 +24,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-public class HexDumpProxyBackendHandler extends ChannelInboundHandlerAdapter {
+public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
     private final Channel inboundChannel;
     private boolean waitOk = false;
 	private static final String TAG = "SecureAccess";
 	private static String WEB_SERVER;
 
-    public HexDumpProxyBackendHandler(Channel inboundChannel) {
+    public EMMSProxyBackendHandler(Channel inboundChannel) {
         this.inboundChannel = inboundChannel;
-		WEB_SERVER = HexDumpProxy.WEB_SERVER;
+		WEB_SERVER = EMMSProxy.WEB_SERVER;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class HexDumpProxyBackendHandler extends ChannelInboundHandlerAdapter {
     		}
 			else {
 				ctx.channel().close();
-				HexDumpProxyFrontendHandler.closeOnFlush(inboundChannel);
+				EMMSProxyFrontendHandler.closeOnFlush(inboundChannel);
 			}
     	}
     	
@@ -104,12 +104,12 @@ public class HexDumpProxyBackendHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        HexDumpProxyFrontendHandler.closeOnFlush(inboundChannel);
+        EMMSProxyFrontendHandler.closeOnFlush(inboundChannel);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
-        HexDumpProxyFrontendHandler.closeOnFlush(ctx.channel());
+        EMMSProxyFrontendHandler.closeOnFlush(ctx.channel());
     }
 }
