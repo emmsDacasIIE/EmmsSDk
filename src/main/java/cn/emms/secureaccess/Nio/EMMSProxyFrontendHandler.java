@@ -16,6 +16,8 @@ package cn.emms.secureaccess.Nio;/*
 
 import android.util.Log;
 
+import javax.net.ssl.SSLException;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -24,7 +26,13 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
 public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
     private final String remoteHost;
@@ -50,7 +58,7 @@ public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
         Bootstrap b = new Bootstrap();
         b.group(inboundChannel.eventLoop())
          .channel(ctx.channel().getClass())
-         .handler(new EMMSProxyBackendHandler(inboundChannel))
+         .handler(new BackEndProxyInitializer(inboundChannel))
          .option(ChannelOption.AUTO_READ, false);
         ChannelFuture f = b.connect(remoteHost, remotePort);
         outboundChannel = f.channel();
@@ -71,11 +79,14 @@ public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
         if (outboundChannel.isActive()) {
-        	
-        	//ByteBuf dataBuf = ctx.alloc().buffer(data.length);//add
-        	//dataBuf.writeBytes(data);//add
-        	
-        	//msg -> dataBuf
+            /*while (EMMSProxy.waitOK) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }*/
+
             Log.d(TAG, "FrontEnd Send Request :"+((ByteBuf)msg).readableBytes());//
 
             outboundChannel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
@@ -103,7 +114,7 @@ public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        Log.e(TAG, cause.toString() );
+        Log.e(TAG, "Front:"+cause.toString() );
         cause.printStackTrace();
         closeOnFlush(ctx.channel());
     }
@@ -114,6 +125,31 @@ public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
     static void closeOnFlush(Channel ch) {
         if (ch.isActive()) {
             ch.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+        }
+    }
+
+    class BackEndProxyInitializer extends ChannelInitializer<SocketChannel> {
+        private Channel frontEndChannel;
+        private SslContext sslContext = null;
+
+        public BackEndProxyInitializer(Channel inboundChannel){
+            this.frontEndChannel = inboundChannel;
+            try {
+                if(EMMSProxy.isHttps()) {
+                    this.sslContext = SslContextBuilder.forClient()
+                            .trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+                }
+            } catch (SSLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        protected void initChannel(SocketChannel ch) throws Exception {
+            ch.pipeline().addLast("waitOK", new BackendSendWebIPHandler(frontEndChannel,sslContext,remoteHost,remotePort));
+            ch.pipeline().addLast("aggegator", new HttpObjectAggregator(512 * 1024));
+            ch.pipeline().addLast(new EMMSProxyBackendHandler(frontEndChannel));
         }
     }
 }

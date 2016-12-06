@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by Administrator on 2016-10-7.
  */
 public class EMMSProxySet {
-    String forwardAddr;
+    String forwardAddr="";
     private HashMap<Integer, String> localPort2Addr = null;
     private List<EMMSProxy> proxies = new ArrayList<>();
 
@@ -32,6 +32,12 @@ public class EMMSProxySet {
                     localPort2Addr.put(key, map.get(key));
                     EMMSProxy emmsProxy = new EMMSProxy(key, server);
                     proxies.add(emmsProxy);
+                    if(!forwardAddr.equals("")) {
+                        String ipAndport[] = forwardAddr.split(":");
+                        String ip = ipAndport[0];
+                        int port = Integer.valueOf(ipAndport[1]);
+                        emmsProxy.setRemoteHost(ip,port);
+                    }
                     emmsProxy.startWork();
                 }
             }

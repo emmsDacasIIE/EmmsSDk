@@ -33,6 +33,10 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import cn.emms.dcsecurity.DcSecurity;
+
+import static android.R.attr.port;
+
 public class Statistics {
 	private static boolean newUser = true;
 	private static int count = 0;
@@ -58,51 +62,50 @@ public class Statistics {
 			return;
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(ctx);
-		newUser = prefs.getBoolean("newUser", true);
-		//accessToken = prefs.getString("accessToken", null);
+
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					if (null==accessToken) {
-						accessToken=getAccessToken(ip,port);
-						if (null==accessToken) return;
-//						SharedPreferences.Editor editor = prefs.edit();
-//						editor.putString("accessToken", accessToken);
-//						editor.commit();
+						//accessToken=new DcSecurity(ctx,"https://"+ip+":"+port).getAccessToken();
+						accessToken = getAccessToken(ip,port);
+						if (null==accessToken)
+							return;
 					}
+					updateNewUser(ctx,ip,port);
 					HttpClient httpClient = new DefaultHttpClient();
-					String uri="http://" + ip + ":" + Integer.toString(port)
-							+ "/EMMS-WS/api/v1/stats/apps/" + ctx.getPackageName()
-							+ "/devices/" + getIMEI(ctx) + "?access_token="
-							+ accessToken;
+					String uri = "https://" + ip + ":" + Integer.toString(port)
+							+"/api/v1/client/devices/"
+							+getIMEI(ctx)
+							+"/apps/"
+							+ctx.getPackageName()
+							+"/stats/usage?access_token="
+							+accessToken;
 					HttpPost post = new HttpPost(uri);
 					
 					post.addHeader("Content-Type", "application/json");  
 				    JSONObject obj = new JSONObject();  
-					if (newUser) {
-						obj.put("type", "new_user");
-					} else {
-						obj.put("type", "total_start_times");
-						obj.put("count",Integer.toString(count));						
-					}
+
+					obj.put("type", "total_start_times");
+					obj.put("count",Integer.toString(count));
+
 					StringEntity s = new StringEntity(obj.toString()); 
 					s.setContentType("application/json");
 					post.setEntity(s);
 					 
-					Log.d("Statistics","post="+post.getURI().toString());
+					Log.d("Statistics","Usage post="+post.getURI().toString());
 					HttpResponse httpResponse=httpClient.execute(post);
-					String result = EntityUtils.toString(httpResponse.getEntity());
-					Log.d("Statistics","result="+result);
-					if (newUser) {
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putBoolean("newUser", false);
-						editor.commit();
+					if(httpResponse.getStatusLine().getStatusCode() != 204) {
+						Log.e("Statistics", "Usage httpResponse: " + httpResponse.getStatusLine().getStatusCode());
+						return;
 					}
+					Log.d("Statistics","Usage result="+httpResponse.getStatusLine().getStatusCode());
 					count = 0;
 					lastUpdateTime = time;
-					Log.d("Statistics","update success");
+					Log.d("Statistics","update Usage success");
 				} catch (Exception e1) {
+					Log.e("Statistics", e1.toString());
 					e1.printStackTrace();
 				}
 			}
@@ -110,7 +113,59 @@ public class Statistics {
 		thread.start();
 		return;
 	}
-	
+
+	public static void updateNewUser(final Context ctx, final String ip, final int port){
+		if (!isNetworkAvailable(ctx))
+			return;
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(ctx);
+		newUser = prefs.getBoolean("newUser", true);
+		// if it isn't the case of adding new user, do nothing;
+		if(!newUser)
+			return;
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (null==accessToken) {
+						accessToken = getAccessToken(ip,port);
+						if (null==accessToken)
+							return;
+					}
+					HttpClient httpClient = new DefaultHttpClient();
+					String uri = "https://" + ip + ":" + Integer.toString(port)
+							+"/api/v1/client/devices/"
+							+getIMEI(ctx)
+							+"/apps/"
+							+ctx.getPackageName()
+							+"/stats/user?access_token="
+							+accessToken;
+					HttpPost post = new HttpPost(uri);
+
+					post.addHeader("Content-Type", "application/json");
+
+					Log.d("Statistics","User post="+post.getURI().toString());
+					HttpResponse httpResponse=httpClient.execute(post);
+					if(httpResponse.getStatusLine().getStatusCode() != 204) {
+						Log.e("Statistics", "User httpResponse: " + httpResponse.getStatusLine().getStatusCode());
+						return;
+					}
+					Log.d("Statistics","User result="+httpResponse.getStatusLine().getStatusCode());
+					if (newUser) {
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putBoolean("newUser", false);
+						editor.commit();
+					}
+					Log.d("Statistics","update new user success");
+				} catch (Exception e1) {
+					Log.e("Statistics", e1.toString());
+					e1.printStackTrace();
+				}
+			}
+		});
+		thread.start();
+		return;
+	}
 	public static String getUpdateUrl(final Context ctx) {
 		//return getUpdateUrl(ctx,"159.226.94.159", 8080);
 		return getUpdateUrl(ctx,"emms.csrcqsf.com", 45478);
@@ -128,8 +183,8 @@ public class Statistics {
 						if (null==accessToken) return;
 					}
 					HttpClient httpClient = new DefaultHttpClient();
-					HttpGet get = new HttpGet("http://" + ip + ":" + Integer.toString(port)
-							+ "/EMMS-WS/api/v1/apps/"+ctx.getPackageName()+"?access_token="
+					HttpGet get = new HttpGet("https://" + ip + ":" + Integer.toString(port)
+							+ "/api/v1/apps/"+ctx.getPackageName()+"?access_token="
 									+ accessToken);
 					HttpParams params = new BasicHttpParams();
 					HttpConnectionParams.setConnectionTimeout(params, 2000);
@@ -142,11 +197,12 @@ public class Statistics {
 							.getString("version_code"));
 					String id=obj.getString("id");
 					if (serviceVersionCode<=nativeVersionCode) return;
-					downloadUrl = "http://" + ip + ":" + Integer.toString(port)
-							+ "/EMMS-WS/api/v1/user/apps/download/"+id
+					downloadUrl = "https://" + ip + ":" + Integer.toString(port)
+							+ "/api/v1/user/apps/download/"+id
 							+"?uuid="+ getIMEI(ctx)+"&access_token="+ accessToken;
 				} catch (Exception e1) {
 					e1.printStackTrace();
+					Log.e("Statistics", e1.toString());
 					return;
 				}
 			}
@@ -159,17 +215,18 @@ public class Statistics {
 		}
 		return downloadUrl;
 	}
+
 	
 	private static String getAccessToken(String ip,int port) 
 			throws URISyntaxException, ClientProtocolException, IOException, JSONException {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost();
 		HttpParams params = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(params, 2000);
-		HttpConnectionParams.setSoTimeout(params, 2000);
+		HttpConnectionParams.setConnectionTimeout(params, 10000);
+		HttpConnectionParams.setSoTimeout(params, 10000);
 		post.setParams(params);
-		post.setURI(new URI("http://" + ip + ":" + port
-				+ "/EMMS-WS/oauth/token"));
+		post.setURI(new URI("https://" + ip + ":" + port
+				+ "/api/v1/oauth/token"));//  /EMMS-WS/api/v1/oauth/token
 		List<NameValuePair> paramList = new ArrayList<NameValuePair>();
 
 		BasicNameValuePair grant_typeParam = new BasicNameValuePair(
@@ -185,13 +242,14 @@ public class Statistics {
 		Log.d("Statistics","post="+post.getURI().toString());
 		HttpResponse httpResponse = httpClient.execute(post);
 		String result = EntityUtils.toString(httpResponse.getEntity());
+		Log.d("Statistics","result"+ result);
 		if (null == result)
 			return null;
 		JSONObject obj = new JSONObject(result);
 		if (null == obj.getString("access_token"))
 			return null;
 		String token = obj.getString("access_token");
-		Log.d("Statistics","receive token="+ accessToken);
+		Log.d("Statistics","receive token="+ token);
 		return token;
 	}
 

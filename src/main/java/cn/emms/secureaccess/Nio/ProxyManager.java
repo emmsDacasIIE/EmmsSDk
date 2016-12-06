@@ -23,8 +23,7 @@ public class ProxyManager {
     static Context context;
     static Class aClass;
     static String serviceName;
-
-
+    static HashMap<Integer,String> map;
     /**标志位 来判断是否初始化成功*/
     static boolean initFlag = false;
 
@@ -49,8 +48,23 @@ public class ProxyManager {
             initFlag = false;
             return false;
         }
-        setLocalPort(localPort);
-        setWebServerAddr(webServerAddr);
+        map = new HashMap<>();
+        map.put(localPort,webServerAddr);
+
+        setContext(context);
+        setIForwardServerAddr("emms.csrcqsf.com:43546");//192.168.151.123:3456  emms.csrcqsf.com 122.4.80.26
+        aClass = cls;
+        serviceName = packageName;
+        initFlag = true;
+        return initFlag;
+    }
+
+    public static boolean init(Context context,Class cls,String packageName,HashMap<Integer,String> addrMap){
+        if(packageName.equals("")||addrMap.size()<1){
+            initFlag = false;
+            return false;
+        }
+        map = new HashMap<>(addrMap);
         setContext(context);
         setIForwardServerAddr("emms.csrcqsf.com:43546");//192.168.151.123:3456  emms.csrcqsf.com 122.4.80.26
         aClass = cls;
@@ -71,13 +85,11 @@ public class ProxyManager {
         WebServerAddr = webServerAddr1;
     }
 
-    static void setIForwardServerAddr(String iForwardServerAddr1){
+    public static void setIForwardServerAddr(String iForwardServerAddr1){
         IForwardServerAddr = iForwardServerAddr1;
     }
 
     static Intent getStartIntent(){
-        HashMap<Integer,String> map = new HashMap<>();
-        map.put(localPort,WebServerAddr);
         Bundle bundle = new Bundle();
         bundle.putSerializable("IpMap",map);
 

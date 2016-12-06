@@ -38,6 +38,7 @@ public class ProxyService extends Service {
         if(map.size()<0)
             return null;
 
+        emmsProxySet.forwardAddr = intent.getStringExtra("ForwardAddr");
         emmsProxySet.addMapping(map);
         return new ProxyIBinder(emmsProxySet);
     }

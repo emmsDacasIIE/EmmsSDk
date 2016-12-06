@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class DcSecurity {
 	private String ip;
@@ -26,24 +27,27 @@ public class DcSecurity {
 		this.ip="https://emms.csrcqsf.com:47836";
 	}
 
-	private void getAccessToken() throws JSONException, IOException {
+	public DcSecurity(Context ctx, String url) {
+		this.ctx=ctx;
+//		this.ip = "https://159.226.94.159:8443";
+		this.ip= url;
+	}
+
+	private String getAccessToken() throws JSONException, IOException {
 		// 锟斤拷锟斤拷锟斤拷锟斤拷
 		// HttpClient httpClient = new DefaultHttpClient();
 		HttpClient httpClient = HttpsClient.newHttpsClient();
 		HttpPost post = new HttpPost(ip
-				+ "/EMMS-WS/oauth/token?grant_type=client_credentials&client_id=2b5a38705d7b3562655925406a652e65&client_secret=234f523128212d6e70634446224c2a48");
+				+ "/api/v1/oauth/token?grant_type=client_credentials&client_id=2b5a38705d7b3562655925406a652e65&client_secret=234f523128212d6e70634446224c2a48");
 
 		// 锟斤拷锟斤拷HttpPost锟斤拷锟襟，诧拷锟斤拷锟斤拷HttpResponse锟斤拷锟斤拷
 		HttpResponse httpResponse = null;
 		httpResponse = httpClient.execute(post);
-
 		String result = null;
-
 		result = EntityUtils.toString(httpResponse.getEntity());
-
 		JSONObject jsonObject = new JSONObject(result);
 		accessToken = jsonObject.getString("access_token");
-		return;
+		return accessToken;
 	}
 
 	public boolean disableDevice() {
@@ -63,7 +67,7 @@ public class DcSecurity {
 		// 锟斤拷锟斤拷锟斤拷锟斤拷
 		// HttpClient httpClient = new DefaultHttpClient();
 		HttpClient httpClient = HttpsClient.newHttpsClient();
-		HttpPut get = new HttpPut(ip + "/EMMS-WS/api/v1/devices/" + IMEI + "/suspended?access_token=" + accessToken);
+		HttpPut get = new HttpPut(ip + "/api/v1/devices/" + IMEI + "/suspended?access_token=" + accessToken);
 
 		// 锟斤拷锟斤拷HttpPost锟斤拷锟襟，诧拷锟斤拷锟斤拷HttpResponse锟斤拷锟斤拷
 		HttpResponse httpResponse = null;
@@ -104,8 +108,8 @@ public class DcSecurity {
 		// 锟斤拷锟斤拷锟斤拷锟斤拷
 		// HttpClient httpClient = new DefaultHttpClient();
 		HttpClient httpClient = HttpsClient.newHttpsClient();
-		HttpGet get = new HttpGet(ip + "/EMMS-WS/api/v1/devices/" + IMEI + "/?access_token=" + accessToken);
-
+		HttpGet get = new HttpGet(ip + "/api/v1/client/devices/" + IMEI + "?access_token=" + accessToken);
+		Log.d("SDK", "authDevice request:"+get.getURI().toString());
 		// 锟斤拷锟斤拷HttpPost锟斤拷锟襟，诧拷锟斤拷锟斤拷HttpResponse锟斤拷锟斤拷
 		HttpResponse httpResponse = null;
 		try {
@@ -132,6 +136,7 @@ public class DcSecurity {
 		JSONObject jsonObject = null;
 		try {
 			jsonObject = new JSONObject(result);
+			Log.d("SDK", "authDevice: "+jsonObject.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return status;

@@ -26,7 +26,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
     private final Channel inboundChannel;
-    private boolean waitOk = false;
+    //public Boolean waitOk = false;
 	private static final String TAG = "SecureAccess";
 	private static String WEB_SERVER;
 
@@ -38,7 +38,7 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(final ChannelHandlerContext ctx){
 		Log.d(TAG, "BackEnd channel Active");
-		ByteBuf addrInfoBuf = ctx.alloc().buffer(4*WEB_SERVER.length());
+		/* ByteBuf addrInfoBuf = ctx.alloc().buffer(4*WEB_SERVER.length());
     	addrInfoBuf.writeBytes(WEB_SERVER.getBytes());
 		Log.d(TAG, "BeckEnd send WEB IP to SA");
 		ctx.channel().writeAndFlush(addrInfoBuf)
@@ -46,8 +46,9 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
 			@Override
 			public void operationComplete(ChannelFuture future){
 				if(future.isSuccess()){
-					waitOk = true;
+					EMMSProxy.waitOK = true;
 					ctx.channel().read();
+
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -55,21 +56,21 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
 					}
 				}
 				else{
-					waitOk = false;
+					//EMMSProxy.waitOK = false;
 					future.channel().close();
 					inboundChannel.close();
 				}				
 			}
-		});
+		});*/
     	//waitOk = true;
         ctx.read();
     }
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
-    	if(waitOk){
+    	/*if(EMMSProxy.waitOK){
     		// OK replay has arrived, so it needn't to wait ok;
-    		waitOk = false;
+			EMMSProxy.waitOK = false;
     		ByteBuf byteBuf = (ByteBuf)msg;
     		byte[] result = new byte[byteBuf.readableBytes()];
 		
@@ -78,15 +79,16 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
     		// if the reply doesn't start with ok, the proxy fails.
     		if (replyOkString.startsWith("OK")) {
 				Log.d(TAG, "SA says OK!");
+				EMMSProxy.waitOK.notifyAll();
 				ctx.channel().read();
     		}
 			else {
 				ctx.channel().close();
 				EMMSProxyFrontendHandler.closeOnFlush(inboundChannel);
 			}
-    	}
+    	}*/
     	
-    	else{
+    	//else{
 			Log.d(TAG, "BackEnd get Response: "+((ByteBuf)msg).readableBytes());
 			inboundChannel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
                 @Override
@@ -99,7 +101,7 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
             });	
-    	}
+    	//}
     }
 
     @Override
@@ -109,7 +111,8 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+		Log.e(TAG, "Back: "+cause.toString() );
+		cause.printStackTrace();
         EMMSProxyFrontendHandler.closeOnFlush(ctx.channel());
     }
 }

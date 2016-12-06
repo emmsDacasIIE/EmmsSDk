@@ -17,6 +17,10 @@ package cn.emms.secureaccess.Nio;
 
 import android.util.Log;
 
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLException;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -31,13 +35,23 @@ public class EMMSProxy {
     private String REMOTE_HOST = System.getProperty("remoteHost", "emms.csrcqsf.com");
     private int REMOTE_PORT = Integer.parseInt(System.getProperty("remotePort", "43546"));
     static  String WEB_SERVER;
-    private static final String TAG = "SecureAccess";
+    static final String TAG = "SecureAccess";
+    private static boolean https = true;
+    static public Boolean waitOK = true;
 
     private  EventLoopGroup bossGroup,workerGroup;
 
     public void setRemoteHost(String ip, int port){
         this.REMOTE_HOST = ip;
         this.REMOTE_PORT = port;
+    }
+
+    public static void setHttps(boolean flag){
+        https = flag;
+    }
+
+    public static boolean isHttps(){
+        return https;
     }
 
     public EMMSProxy(int localPort, String webAddr){
@@ -64,6 +78,10 @@ public class EMMSProxy {
                             .bind(LOCAL_PORT).sync().channel().closeFuture().sync();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (CertificateException e) {
+                    Log.e(TAG, "run: ", e);
+                } catch (SSLException e) {
+                    Log.e(TAG, "run: ", e);
                 } finally {
                     clearProxy();
                 }

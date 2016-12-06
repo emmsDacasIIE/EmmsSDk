@@ -43,20 +43,16 @@
         <item>.jpeg</item>
         <item>.bmp</item>
     </array><style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        
     </style><array name="fileEndingAudio">
         <item>.mp3</item>
         <item>.wav</item>
         <item>.ogg</item>
         <item>.midi</item>
     </array><style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+        
     </style></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\values-v11\values-v11.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light">
-        <!-- API 11 theme customizations can go here. -->
+        
     </style></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\intermediates\bundles\debug\res\values-v14\values-v14.xml" qualifiers="v14"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- API 14 theme customizations can go here. -->
+        
     </style></file></source></dataSet><dataSet config="main" generated-set="main$Generated"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\androidTest\res"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\rs\androidTest\debug"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>

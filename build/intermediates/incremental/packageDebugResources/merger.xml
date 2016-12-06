@@ -48,15 +48,11 @@
         <item>.ppt</item>
         <item>.pptx</item>
     </array></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\strings.xml" qualifiers=""><string name="title">企业</string><string name="app_name">MCM_SDK</string></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values\styles.xml" qualifiers=""><style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        
     </style><style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+        
     </style></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values-v11\styles.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light">
-        <!-- API 11 theme customizations can go here. -->
+        
     </style></file><file path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\main\res\values-v14\styles.xml" qualifiers="v14"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- API 14 theme customizations can go here. -->
+        
     </style></file></source><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\rs\debug"/><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\build\generated\res\resValues\debug"/></dataSet><dataSet config="debug" generated-set="debug$Generated"><source path="C:\Users\Administrator\Desktop\AndroidTestLab\MCM_SDK\src\debug\res"/></dataSet><mergedItems/></merger>
