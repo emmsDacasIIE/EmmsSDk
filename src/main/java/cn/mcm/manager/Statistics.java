@@ -1,4 +1,4 @@
-package cn.mcm.appmanager;
+package cn.mcm.manager;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,14 +28,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-
-import cn.emms.dcsecurity.DcSecurity;
-
-import static android.R.attr.port;
 
 public class Statistics {
 	private static boolean newUser = true;
@@ -74,13 +69,14 @@ public class Statistics {
 							return;
 					}
 					updateNewUser(ctx,ip,port);
+					HttpsTrustManager.allowAllSSL();
 					HttpClient httpClient = new DefaultHttpClient();
 					String uri = "https://" + ip + ":" + Integer.toString(port)
 							+"/api/v1/client/devices/"
 							+getIMEI(ctx)
 							+"/apps/"
 							+ctx.getPackageName()
-							+"/stats/usage?access_token="
+							+"/stats/usage?platform=android&access_token="
 							+accessToken;
 					HttpPost post = new HttpPost(uri);
 					
@@ -132,13 +128,14 @@ public class Statistics {
 						if (null==accessToken)
 							return;
 					}
+					HttpsTrustManager.allowAllSSL();
 					HttpClient httpClient = new DefaultHttpClient();
 					String uri = "https://" + ip + ":" + Integer.toString(port)
 							+"/api/v1/client/devices/"
 							+getIMEI(ctx)
 							+"/apps/"
 							+ctx.getPackageName()
-							+"/stats/user?access_token="
+							+"/stats/user?platform=android&access_token="
 							+accessToken;
 					HttpPost post = new HttpPost(uri);
 
@@ -172,6 +169,59 @@ public class Statistics {
 	}
 	
 	public static String getUpdateUrl(final Context ctx,final String ip,final int port) {
+		if(Version.getServerVersionCode(ip+":"+port)<1)
+			return oldGetUpdateUrl(ctx,ip,port);
+		else
+			return newGetUpdateUrl(ctx,ip,port);
+	}
+	public static String newGetUpdateUrl(final Context ctx,final String ip,final int port) {
+		downloadUrl = null;
+		final int nativeVersionCode = getVersionCode(ctx);
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (null==accessToken) {
+						accessToken=getAccessToken(ip,port);
+						if (null==accessToken) return;
+					}
+					HttpsTrustManager.allowAllSSL();
+					HttpClient httpClient = new DefaultHttpClient();
+					HttpGet get = new HttpGet("https://" + ip + ":" + Integer.toString(port)
+							+"/api/v1/client/devices/"
+							+getIMEI(ctx)
+							+"/apps/"
+							+ctx.getPackageName()
+							+"?platform=android&access_token="
+							+accessToken);
+					HttpParams params = new BasicHttpParams();
+					HttpConnectionParams.setConnectionTimeout(params, 50000);
+					HttpConnectionParams.setSoTimeout(params, 50000);
+					get.setParams(params);
+					HttpResponse httpResponse=httpClient.execute(get);
+					String result = EntityUtils.toString(httpResponse.getEntity());
+					Log.e("Statistics", "VersionInfo:"+result);
+					JSONObject obj = new JSONObject(result);
+					int serviceVersionCode = Integer.parseInt(obj
+							.getString("version_code"));
+					if (serviceVersionCode <= nativeVersionCode)
+						return;
+					downloadUrl =obj.getString("url");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					Log.e("Statistics", e1.toString());
+				}
+			}
+		});
+		thread.start();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return downloadUrl;
+	}
+	public static String oldGetUpdateUrl(final Context ctx,final String ip,final int port) {
 		downloadUrl=null;
 		final int nativeVersionCode=getVersionCode(ctx);
 		Thread thread = new Thread(new Runnable() {
@@ -183,30 +233,29 @@ public class Statistics {
 						if (null==accessToken) return;
 					}
 					HttpClient httpClient = new DefaultHttpClient();
-					HttpGet get = new HttpGet("https://" + ip + ":" + Integer.toString(port)
-							+ "/api/v1/apps/"+ctx.getPackageName()+"?access_token="
-									+ accessToken);
+					HttpGet get = new HttpGet("http://" + ip + ":" + Integer.toString(port)
+							+ "/EMMS-WS/api/v1/apps/"+ctx.getPackageName()+"?access_token="
+							+ accessToken);
 					HttpParams params = new BasicHttpParams();
 					HttpConnectionParams.setConnectionTimeout(params, 2000);
 					HttpConnectionParams.setSoTimeout(params, 2000);
 					get.setParams(params);
 					HttpResponse httpResponse=httpClient.execute(get);
-					String result = EntityUtils.toString(httpResponse.getEntity());	
+					String result = EntityUtils.toString(httpResponse.getEntity());
 					JSONObject obj = new JSONObject(result);
 					int serviceVersionCode=Integer.parseInt(obj
 							.getString("version_code"));
 					String id=obj.getString("id");
 					if (serviceVersionCode<=nativeVersionCode) return;
-					downloadUrl = "https://" + ip + ":" + Integer.toString(port)
-							+ "/api/v1/user/apps/download/"+id
+					downloadUrl = "http://" + ip + ":" + Integer.toString(port)
+							+ "/EMMS-WS/api/v1/user/apps/download/"+id
 							+"?uuid="+ getIMEI(ctx)+"&access_token="+ accessToken;
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					Log.e("Statistics", e1.toString());
 					return;
 				}
 			}
-		});		
+		});
 		thread.start();
 		try {
 			thread.join();
@@ -219,14 +268,20 @@ public class Statistics {
 	
 	private static String getAccessToken(String ip,int port) 
 			throws URISyntaxException, ClientProtocolException, IOException, JSONException {
+		HttpsTrustManager.allowAllSSL();
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost();
 		HttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, 10000);
 		HttpConnectionParams.setSoTimeout(params, 10000);
 		post.setParams(params);
+		String url = "";
+		if(Version.getServerVersionCode(ip)<1)
+			url = "/EMMS-WS/oauth/token";
+		else
+			url = "/api/v1/oauth/token";
 		post.setURI(new URI("https://" + ip + ":" + port
-				+ "/api/v1/oauth/token"));//  /EMMS-WS/api/v1/oauth/token
+				+ url));//  /EMMS-WS/api/v1/oauth/token
 		List<NameValuePair> paramList = new ArrayList<NameValuePair>();
 
 		BasicNameValuePair grant_typeParam = new BasicNameValuePair(

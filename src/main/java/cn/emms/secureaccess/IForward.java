@@ -18,7 +18,7 @@ import java.util.Set;
 public class IForward {
     //public static final int FORWARD_PORT = 3546;
     private String TAG="SecureAccess";
-    String forwardAddr;
+    private String forwardAddr;
     private HashMap<Integer, String> localPort2Addr = null;
     private List<ATrans> transactions = new ArrayList<>();
 
