@@ -79,21 +79,13 @@ public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
         if (outboundChannel.isActive()) {
-            /*while (EMMSProxy.waitOK) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }*/
-
             Log.d(TAG, "FrontEnd Send Request :"+((ByteBuf)msg).readableBytes());//
 
             outboundChannel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) {
                     if (future.isSuccess()) {
-                        //Log.d(TAG, "Ok! FrontEnd write to BackEnd");
+                        Log.d(TAG, "Ok! FrontEnd write to BackEnd");
                         // was able to flush out data, start to read the next chunk
                         ctx.channel().read();
                     } else {
@@ -147,7 +139,8 @@ public class EMMSProxyFrontendHandler extends ChannelInboundHandlerAdapter {
 
         @Override
         protected void initChannel(SocketChannel ch) throws Exception {
-            ch.pipeline().addLast("waitOK", new BackendSendWebIPHandler(frontEndChannel,sslContext,remoteHost,remotePort));
+            //ch.pipeline().addLast("waitOK", new BackendSendWebIPHandler(frontEndChannel,sslContext,remoteHost,remotePort));
+            ch.pipeline().addFirst("ssl", sslContext.newHandler(ch.alloc(), remoteHost, remotePort));
             ch.pipeline().addLast("aggegator", new HttpObjectAggregator(512 * 1024));
             ch.pipeline().addLast(new EMMSProxyBackendHandler(frontEndChannel));
         }

@@ -38,37 +38,37 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(final ChannelHandlerContext ctx){
 		Log.d(TAG, "BackEnd channel Active");
-		/* ByteBuf addrInfoBuf = ctx.alloc().buffer(4*WEB_SERVER.length());
-    	addrInfoBuf.writeBytes(WEB_SERVER.getBytes());
-		Log.d(TAG, "BeckEnd send WEB IP to SA");
-		ctx.channel().writeAndFlush(addrInfoBuf)
-    		.addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture future){
-				if(future.isSuccess()){
-					EMMSProxy.waitOK = true;
-					ctx.channel().read();
-
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				else{
-					//EMMSProxy.waitOK = false;
-					future.channel().close();
-					inboundChannel.close();
-				}				
-			}
-		});*/
+//		ByteBuf addrInfoBuf = ctx.alloc().buffer(4*WEB_SERVER.length());
+//    	addrInfoBuf.writeBytes(WEB_SERVER.getBytes());
+//		Log.d(TAG, "BeckEnd send WEB IP to SA");
+//		ctx.channel().writeAndFlush(addrInfoBuf)
+//    		.addListener(new ChannelFutureListener() {
+//			@Override
+//			public void operationComplete(ChannelFuture future){
+//				if(future.isSuccess()){
+//					EMMSProxy.waitOK = true;
+//					ctx.channel().read();
+//
+//					try {
+//						Thread.sleep(100);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				else{
+//					//EMMSProxy.waitOK = false;
+//					future.channel().close();
+//					inboundChannel.close();
+//				}
+//			}
+//		});
     	//waitOk = true;
         ctx.read();
     }
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
-    	/*if(EMMSProxy.waitOK){
+    	if(EMMSProxy.waitOK){
     		// OK replay has arrived, so it needn't to wait ok;
 			EMMSProxy.waitOK = false;
     		ByteBuf byteBuf = (ByteBuf)msg;
@@ -86,9 +86,9 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
 				ctx.channel().close();
 				EMMSProxyFrontendHandler.closeOnFlush(inboundChannel);
 			}
-    	}*/
+    	}
     	
-    	//else{
+    	else{
 			Log.d(TAG, "BackEnd get Response: "+((ByteBuf)msg).readableBytes());
 			inboundChannel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
                 @Override
@@ -101,7 +101,7 @@ public class EMMSProxyBackendHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
             });	
-    	//}
+    	}
     }
 
     @Override

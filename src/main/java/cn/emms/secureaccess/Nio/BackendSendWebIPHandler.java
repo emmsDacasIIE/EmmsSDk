@@ -14,6 +14,7 @@ import io.netty.handler.ssl.SslContext;
 /**
  * Created by Sun RX on 2016-10-18.
  */
+@Deprecated
 public class BackendSendWebIPHandler extends ChannelInboundHandlerAdapter{
     private final Channel inboundChannel;
     private static String WEB_SERVER;

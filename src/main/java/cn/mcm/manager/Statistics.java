@@ -268,7 +268,6 @@ public class Statistics {
 	
 	private static String getAccessToken(String ip,int port) 
 			throws URISyntaxException, ClientProtocolException, IOException, JSONException {
-		HttpsTrustManager.allowAllSSL();
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost post = new HttpPost();
 		HttpParams params = new BasicHttpParams();
@@ -276,7 +275,7 @@ public class Statistics {
 		HttpConnectionParams.setSoTimeout(params, 10000);
 		post.setParams(params);
 		String url = "";
-		if(Version.getServerVersionCode(ip)<1)
+		if(Version.getServerVersionCode(ip+":"+port)<1)
 			url = "/EMMS-WS/oauth/token";
 		else
 			url = "/api/v1/oauth/token";
@@ -295,6 +294,8 @@ public class Statistics {
 		paramList.add(client_secretParam);
 		post.setEntity(new UrlEncodedFormEntity(paramList, HTTP.UTF_8));
 		Log.d("Statistics","post="+post.getURI().toString());
+
+		HttpsTrustManager.allowAllSSL();
 		HttpResponse httpResponse = httpClient.execute(post);
 		String result = EntityUtils.toString(httpResponse.getEntity());
 		Log.d("Statistics","result"+ result);

@@ -55,6 +55,7 @@ public class HttpsTrustManager implements X509TrustManager {
                 return true;
             }
 
+
         });
 
         SSLContext context = null;

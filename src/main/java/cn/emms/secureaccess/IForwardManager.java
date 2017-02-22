@@ -66,7 +66,7 @@ public class IForwardManager {
         setLocalPort(localPort);
         setWebServerAddr(webServerAddr);
         setContext(context);
-        setIForwardServerAddr("122.4.80.26:43546");//192.168.151.175:3456  emms.csrcqsf.com:43546
+        setIForwardServerAddr("emms.csrcqsf.com:43546");//192.168.151.175:3456  emms.csrcqsf.com:43546
         aClass = cls;
         serviceName = packageName;
         initFlag = true;
@@ -87,7 +87,7 @@ public class IForwardManager {
         WebServerAddr = webServerAddr1;
     }
 
-    static void setIForwardServerAddr(String iForwardServerAddr1){
+    static public void setIForwardServerAddr(String iForwardServerAddr1){
         IForwardServerAddr = iForwardServerAddr1;
     }
 

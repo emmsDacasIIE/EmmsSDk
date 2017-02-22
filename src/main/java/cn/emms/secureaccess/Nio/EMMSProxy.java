@@ -37,7 +37,7 @@ public class EMMSProxy {
     static  String WEB_SERVER;
     static final String TAG = "SecureAccess";
     private static boolean https = true;
-    static public Boolean waitOK = true;
+    static public Boolean waitOK = false;
 
     private  EventLoopGroup bossGroup,workerGroup;
 

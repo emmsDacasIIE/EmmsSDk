@@ -1,5 +1,7 @@
 package cn.mcm.manager;
 
+import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -27,15 +29,15 @@ public class Version {
     static private void setServerVersionCode(String ip){
         try {
             HttpClient httpClient = HttpsClient.newHttpsClient();
-            HttpGet post = new HttpGet("https://" + ip + "/api/v1/server");
+            HttpGet get = new HttpGet("https://" + ip + "/api/v1/server");
 
             HttpResponse httpResponse = null;
-            httpResponse = httpClient.execute(post);
+            httpResponse = httpClient.execute(get);
             String result = EntityUtils.toString(httpResponse.getEntity());
             JSONObject jsonObject = new JSONObject(result);
             serverVersionCode = jsonObject.getInt("version_code");
-        }catch (Exception e)
-        {
+        }catch (Exception e) {
+            Log.e("Statistics", "setServerVersionCode: ",e );
             serverVersionCode = -1;
         }
     }
