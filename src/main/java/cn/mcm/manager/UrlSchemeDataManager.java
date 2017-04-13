@@ -16,9 +16,9 @@ public class UrlSchemeDataManager {
     static private final String keyBytes = "abcdefgabcdefg12";
     private String username = null;
     private String password = null;
-    private State mState = State.NotGetIntent;
+    private State mState = State.ErrorIntent;
     public enum State{
-        NotGetIntent,
+        ErrorIntent,
         IllegalIntent,
         NormalIntent,
     }
