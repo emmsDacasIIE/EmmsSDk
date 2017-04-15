@@ -16,7 +16,10 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import cn.emms.IMEI;
 import cn.mcm.manager.Version;
+
+import static cn.emms.IMEI.getIMEI;
 
 public class DcSecurity {
 	private String ip;
@@ -67,7 +70,7 @@ public class DcSecurity {
 				return status;
 			}
 		}
-		String IMEI = getIMEI(ctx);
+		String IMEI = cn.emms.IMEI.getIMEI(ctx);
 		// 锟斤拷锟斤拷锟斤拷锟斤拷
 		// HttpClient httpClient = new DefaultHttpClient();
 		HttpClient httpClient = HttpsClient.newHttpsClient();
@@ -166,10 +169,5 @@ public class DcSecurity {
 		DataCleanManager.cleanDatabases(ctx);
 		DataCleanManager.cleanSharedPreference(ctx);
 		DataCleanManager.cleanFiles(ctx); 
-	}
-
-	private static String getIMEI(Context context) {
-		String Imei = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
-		return Imei;
 	}
 }

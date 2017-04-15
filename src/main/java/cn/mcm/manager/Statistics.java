@@ -32,6 +32,8 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import static cn.emms.IMEI.getIMEI;
+
 public class Statistics {
 	private static boolean newUser = true;
 	private static int count = 0;
@@ -316,15 +318,6 @@ public class Statistics {
 			return cm.getActiveNetworkInfo().isAvailable();
 		}
 		return false;
-	}
-
-	private static String getIMEI(Context ctx) {
-		if (imei == null) {
-			TelephonyManager telephonyManager = (TelephonyManager) ctx
-					.getSystemService(Context.TELEPHONY_SERVICE);
-			imei = telephonyManager.getDeviceId();
-		}
-		return imei;
 	}
 	
 	private static int getVersionCode(Context context)
