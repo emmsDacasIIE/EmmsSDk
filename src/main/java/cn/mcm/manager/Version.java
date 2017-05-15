@@ -25,6 +25,9 @@ public class Version {
         }
         return serverVersionCode;
     }
+    static public void clearVersionCode (){
+        serverVersionCode = 0;
+    }
     private Version(){}
     static private void setServerVersionCode(String ip){
         try {
