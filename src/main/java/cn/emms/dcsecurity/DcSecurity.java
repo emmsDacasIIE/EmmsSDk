@@ -13,13 +13,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import cn.emms.IMEI;
+import cn.emms.Tools;
 import cn.mcm.manager.Version;
 
-import static cn.emms.IMEI.getIMEI;
+import static cn.emms.Tools.getIMEI;
 
 public class DcSecurity {
 	private String ip;
@@ -70,7 +69,7 @@ public class DcSecurity {
 				return status;
 			}
 		}
-		String IMEI = cn.emms.IMEI.getIMEI(ctx);
+		String IMEI = Tools.getIMEI(ctx);
 		// 锟斤拷锟斤拷锟斤拷锟斤拷
 		// HttpClient httpClient = new DefaultHttpClient();
 		HttpClient httpClient = HttpsClient.newHttpsClient();

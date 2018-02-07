@@ -29,10 +29,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import static cn.emms.IMEI.getIMEI;
+import static cn.emms.Tools.getIMEI;
 
 public class Statistics {
 	private static boolean newUser = true;
